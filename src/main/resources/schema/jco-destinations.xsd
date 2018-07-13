@@ -1,0 +1,30 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:org.arachna.jboss:destination-service:1.0"
+           xmlns="urn:org.arachna.jboss:destination-service:1.0"
+           elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+
+    <!-- The subsystem root element -->
+    <xs:element name="jco-destinations" type="jco-destinationsType"/>
+    <xs:complexType name="securityType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="user-name"/>
+            <xs:element type="xs:string" name="password"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="jco-destinationType">
+        <xs:sequence>
+            <xs:element type="securityType" name="security"/>
+            <xs:element type="xs:string" name="as-host"/>
+            <xs:element type="xs:string" name="group"/>
+            <xs:element type="xs:string" name="language"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="jndi-name"/>
+        <xs:attribute type="xs:byte" name="client"/>
+        <xs:attribute type="xs:byte" name="sys-nr"/>
+        <xs:attribute type="xs:string" name="destination"/>
+    </xs:complexType>
+    <xs:complexType name="jco-destinationsType">
+        <xs:sequence>
+            <xs:element type="jco-destinationType" name="jco-destination"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

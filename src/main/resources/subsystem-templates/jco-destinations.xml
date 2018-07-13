@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+    <extension-module>org.arachna.jboss.jco-destinationservice</extension-module>
+    <subsystem xmlns="urn:org.arachna.jboss:destination-service:1.0">
+        <jco-destinations>
+            <jco-destination jndi-name="java:jboss/jco-destinations/ExampleDestination"
+                             client="100" sys-nr="00" destination="ExampleDestination">
+                <security>
+                    <user-name>user</user-name>
+                    <password>secret</password>
+                </security>
+                <as-host>apphost.your-organisation.intern</as-host>
+                <group>SAP LOGON GROUP</group>
+                <language>de</language>
+            </jco-destination>
+        </jco-destinations>
+    </subsystem>
+</config>
