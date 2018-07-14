@@ -1,7 +1,7 @@
 package org.arachna.wildfly.jcosubsystem.extension;
 
-import org.jboss.logging.annotations.Message;
-import org.jboss.logging.annotations.MessageBundle;
+import org.jboss.solder.messages.Message;
+import org.jboss.solder.messages.MessageBundle;
 
 /**
  * @author weigo
