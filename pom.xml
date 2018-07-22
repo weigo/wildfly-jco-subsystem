@@ -45,7 +45,7 @@
         <version.jboss.logging>3.3.1.Final</version.jboss.logging>
         <version.jboss.logging.annotations>2.1.0.Final</version.jboss.logging.annotations>
         <version.jboss.solder.tooling>3.2.1.Final</version.jboss.solder.tooling>
-        <version.junit>4.8.2</version.junit>
+        <version.junit>4.12</version.junit>
         <version.validation-api>2.0.1.Final</version.validation-api>
         <version.jco3>3.0.17</version.jco3>
         <module.name>org.arachna.jboss.destinationservice</module.name>

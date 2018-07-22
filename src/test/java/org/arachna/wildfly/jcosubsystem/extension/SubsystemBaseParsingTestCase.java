@@ -2,6 +2,7 @@ package org.arachna.wildfly.jcosubsystem.extension;
 
 import org.jboss.as.subsystem.test.AbstractSubsystemBaseTest;
 
+import org.junit.Assume;
 import java.io.IOException;
 
 /**
@@ -25,6 +26,6 @@ public class SubsystemBaseParsingTestCase extends AbstractSubsystemBaseTest {
 
     @Override
     protected String getSubsystemXsdPath() throws Exception {
-        return "/schema/jco-destinations.xsd";
+        return "schema/jco-destinations.xsd";
     }
 }
