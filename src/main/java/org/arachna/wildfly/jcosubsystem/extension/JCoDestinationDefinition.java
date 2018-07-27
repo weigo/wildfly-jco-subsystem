@@ -12,7 +12,7 @@ import static org.arachna.wildfly.jcosubsystem.extension.Constants.JCO_DESTINATI
  * @author Dirk Weigenand
  */
 public class JCoDestinationDefinition extends SimpleResourceDefinition {
-    public static final String DESTINATION = "destination";
+    public static final String DESTINATION = "jco-destination";
     static final PropertiesAttributeDefinition DESTINATION_PROPERTIES = new PropertiesAttributeDefinition.Builder(JCoDestinationDescriptor.Tag.JCO_DESTINATION.getLocalName(), true)
             .setXmlName(JCoDestinationDescriptor.Tag.JCO_DESTINATION.getLocalName())
             .setAllowExpression(true)

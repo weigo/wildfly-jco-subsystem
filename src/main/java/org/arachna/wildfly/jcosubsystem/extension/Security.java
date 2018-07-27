@@ -36,18 +36,16 @@ public interface Security {
          */
         PASSWORD("password");
 
-        private static final Map<String, Tag> MAP;
+        private static final Map<String, Tag> MAP = new HashMap<String, Tag>();
 
         static {
-            MAP = new HashMap<String, Tag>() {{
-                for (Tag element : values()) {
-                    final String name = element.getLocalName();
+            for (Tag element : values()) {
+                final String name = element.getLocalName();
 
-                    if (name != null) {
-                        put(name, element);
-                    }
+                if (name != null) {
+                    MAP.put(name, element);
                 }
-            }};
+            }
         }
 
         private String name;

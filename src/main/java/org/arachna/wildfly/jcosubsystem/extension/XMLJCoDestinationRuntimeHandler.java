@@ -55,8 +55,11 @@ public class XMLJCoDestinationRuntimeHandler extends AbstractRuntimeOnlyHandler 
         else if (Constants.GROUP.getName().equals(attributeName)) {
             setStringIfNotNull(context, destination.getGroup());
         }
+        else if (Constants.DESTINATION.getName().equals(attributeName)) {
+            setStringIfNotNull(context, destination.getDestination());
+        }
         else {
-            throw JCoDestinationSubsystemLogger.ROOT_LOGGER.unknownAttribute(attributeName);
+            throw Constants.BUNDLE.unknownAttribute(attributeName);
         }
     }
 
@@ -75,7 +78,7 @@ public class XMLJCoDestinationRuntimeHandler extends AbstractRuntimeOnlyHandler 
         final JCoDestinationDescriptor config = jcoDestinationConfigs.get(pa);
 
         if (config == null) {
-            String exceptionMessage = JCoDestinationSubsystemLogger.ROOT_LOGGER.noJCoDestinationRegisteredForAddress(operationAddress);
+            String exceptionMessage = Constants.BUNDLE.noJCoDestinationRegisteredForAddress(operationAddress);
             throw new OperationFailedException(exceptionMessage);
         }
 
@@ -89,6 +92,6 @@ public class XMLJCoDestinationRuntimeHandler extends AbstractRuntimeOnlyHandler 
     }
 
     private IllegalStateException unknownOperation(String opName) {
-        throw JCoDestinationSubsystemLogger.ROOT_LOGGER.unknownOperation(opName);
+        throw Constants.BUNDLE.unknownOperation(opName);
     }
 }

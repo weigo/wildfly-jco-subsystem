@@ -14,8 +14,7 @@ import java.util.Map;
 
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.ADD;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.*;
 import static org.jboss.as.controller.parsing.ParseUtils.isNoNamespaceAttribute;
 import static org.jboss.as.controller.parsing.ParseUtils.unexpectedAttribute;
 
@@ -44,8 +43,8 @@ public class JCoDestinationParser {
                 break;
             }
             case START_ELEMENT: {
-                switch (JCoDestinationDescriptor.Tag.forName(reader.getLocalName())) {
-                    case JCO_DESTINATION: {
+                switch (Tag.forName(reader.getLocalName())) {
+                    case JCO_DESTINATIONS: {
                         parseJCoDestinations(reader, list, parentAddress);
                         break;
                     }
@@ -71,7 +70,8 @@ public class JCoDestinationParser {
                         return;
                 }
                 case START_ELEMENT: {
-                    switch (JCoDestinationDescriptor.Tag.forName(reader.getLocalName())) {
+                    JCoDestinationDescriptor.Tag tag = JCoDestinationDescriptor.Tag.forName(reader.getLocalName());
+                    switch (tag) {
                         case JCO_DESTINATION: {
                             switch (Namespace.forUri(reader.getNamespaceURI())) {
                                 case JCO_DESTINATIONS_1_0:
@@ -95,9 +95,11 @@ public class JCoDestinationParser {
         final ModelNode operation = new ModelNode();
         operation.get(OP).set(ADD);
 
-        final int count = reader.getAttributeCount();
-        for (int i = 0; i < count; i++) {
+        String destinationName = "";
 
+        final int count = reader.getAttributeCount();
+
+        for (int i = 0; i < count; i++) {
             if (!isNoNamespaceAttribute(reader, i)) {
                 throw unexpectedAttribute(reader, i);
             }
@@ -107,37 +109,25 @@ public class JCoDestinationParser {
             switch (attribute) {
                 case SYSNR: {
                     String value = rawAttributeText(reader, Constants.SYSNR.getXmlName());
-
-                    if (value != null) {
-                        Constants.SYSNR.parseAndSetParameter(value, operation, reader);
-                    }
+                    Constants.SYSNR.parseAndSetParameter(value, operation, reader);
                 }
                 break;
 
                 case CLIENT: {
                     String value = rawAttributeText(reader, Constants.CLIENT.getXmlName());
-
-                    if (value != null) {
-                        Constants.CLIENT.parseAndSetParameter(value, operation, reader);
-                    }
+                    Constants.CLIENT.parseAndSetParameter(value, operation, reader);
                 }
                 break;
 
                 case JNDI_NAME: {
                     String value = rawAttributeText(reader, Constants.JNDI_NAME.getXmlName());
-
-                    if (value != null) {
-                        Constants.JNDI_NAME.parseAndSetParameter(value, operation, reader);
-                    }
+                    Constants.JNDI_NAME.parseAndSetParameter(value, operation, reader);
                 }
                 break;
 
                 case DESTINATION: {
-                    String value = rawAttributeText(reader, Constants.DESTINATION.getXmlName());
-
-                    if (value != null) {
-                        Constants.DESTINATION.parseAndSetParameter(value, operation, reader);
-                    }
+                    destinationName = rawAttributeText(reader, Constants.DESTINATION.getXmlName());
+                    Constants.DESTINATION.parseAndSetParameter(destinationName, operation, reader);
                 }
                 break;
 
@@ -145,6 +135,90 @@ public class JCoDestinationParser {
                     throw ParseUtils.unexpectedAttribute(reader, i);
             }
         }
+
+        final ModelNode address = parentAddress.clone();
+        address.add("jco-destination", destinationName);
+        address.protect();
+
+        operation.get(OP_ADDR).set(address);
+
+        while (reader.hasNext()) {
+            switch (reader.nextTag()) {
+                case END_ELEMENT:
+                    if (JCoDestinationDescriptor.Tag.forName(reader.getLocalName()) == JCoDestinationDescriptor.Tag.JCO_DESTINATION) {
+                        list.add(operation);
+
+                        return;
+                    } else {
+                        if (JCoDestinationDescriptor.Tag.forName(reader.getLocalName()) == JCoDestinationDescriptor.Tag.UNKNOWN) {
+                            throw new ParserException(BUNDLE.unexpectedEndTag(reader.getLocalName()));
+                        }
+                    }
+                    break;
+
+                case START_ELEMENT:
+                    switch (JCoDestinationDescriptor.Tag.forName(reader.getLocalName())) {
+                        case ASHOST:
+                            Constants.ASHOST.parseAndSetParameter(rawElementText(reader), operation, reader);
+                            break;
+
+                        case LANG:
+                            Constants.LANG.parseAndSetParameter(rawElementText(reader), operation, reader);
+                            break;
+
+                        case GROUP:
+                            Constants.GROUP.parseAndSetParameter(rawElementText(reader), operation, reader);
+                            break;
+
+                        case SECURITY:
+                            parseSecurity(reader, operation);
+                            break;
+
+                        default:
+                            throw new ParserException(BUNDLE.unexpectedElement(reader.getLocalName()));
+                    }
+            }
+        }
+
+        throw new ParserException(BUNDLE.unexpectedEndOfDocument());
+    }
+
+    private void parseSecurity(XMLExtendedStreamReader reader, ModelNode operation) throws XMLStreamException {
+        while (reader.hasNext()) {
+            switch (reader.nextTag()) {
+                case END_ELEMENT: {
+                    if (JCoDestinationDescriptor.Tag.forName(reader.getLocalName()) == JCoDestinationDescriptor.Tag.SECURITY) {
+                        //it's fine, do nothing
+                        return;
+                    } else {
+                        if (JCoDestinationDescriptor.Tag.forName(reader.getLocalName()) == JCoDestinationDescriptor.Tag.UNKNOWN) {
+                            throw new ParserException(BUNDLE.unexpectedEndTag(reader.getLocalName()));
+                        }
+                    }
+                    break;
+                }
+
+                case START_ELEMENT: {
+                    Security.Tag tag = Security.Tag.forName(reader.getLocalName());
+
+                    switch (tag) {
+                        case USER_NAME:
+                            Constants.USER_NAME.parseAndSetParameter(rawElementText(reader), operation, reader);
+                            break;
+
+                        case PASSWORD:
+                            Constants.PASSWORD.parseAndSetParameter(rawElementText(reader), operation, reader);
+                            break;
+
+                        default:
+                            throw new ParserException(BUNDLE.unexpectedElement(reader.getLocalName()));
+                    }
+                    break;
+                }
+            }
+        }
+
+        throw new ParserException(BUNDLE.unexpectedEndOfDocument());
     }
 
 

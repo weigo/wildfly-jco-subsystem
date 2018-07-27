@@ -48,7 +48,7 @@
         <version.junit>4.12</version.junit>
         <version.validation-api>2.0.1.Final</version.validation-api>
         <version.jco3>3.0.17</version.jco3>
-        <module.name>org.arachna.jboss.destinationservice</module.name>
+        <module.name>org.arachna.jco-destinations</module.name>
     </properties>
 
 

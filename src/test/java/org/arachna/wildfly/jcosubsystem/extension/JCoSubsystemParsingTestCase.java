@@ -6,10 +6,12 @@ import org.jboss.as.controller.PathAddress;
 import org.jboss.as.controller.PathElement;
 import org.jboss.as.subsystem.test.AbstractSubsystemTest;
 import org.jboss.as.subsystem.test.AdditionalInitialization;
+import org.jboss.as.subsystem.test.KernelServices;
 import org.jboss.as.subsystem.test.KernelServicesBuilder;
 import org.jboss.dmr.ModelNode;
 import org.junit.Test;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.*;
@@ -36,9 +38,7 @@ public class JCoSubsystemParsingTestCase extends AbstractSubsystemTest {
     @Test
     public void testParseSubsystem() throws Exception {
         //Parse the subsystem xml into operations
-        String subsystemXml =
-                "<subsystem xmlns=\"" + Namespace.CURRENT.getUriString() + "\">" +
-                        "</subsystem>";
+        String subsystemXml = createEmptyJCoDestinationsSubsystem();
         List<ModelNode> operations = super.parse(subsystemXml);
 
         ///Check that we have the expected number of operations
@@ -54,14 +54,22 @@ public class JCoSubsystemParsingTestCase extends AbstractSubsystemTest {
         Assert.assertEquals(JCoSubsystemExtension.SUBSYSTEM_NAME, element.getValue());
     }
 
+    private String createEmptyJCoDestinationsSubsystem() {
+        return "<subsystem xmlns=\"" + Namespace.CURRENT.getUriString() + "\">" +
+                    "<jco-destinations>" +
+                    "</jco-destinations>" +
+                    "</subsystem>";
+    }
+
     /**
      * Test that the model created from the xml looks as expected
      */
     @Test
     public void testInstallIntoController() throws Exception {
         //Read the whole model and make sure it looks as expected
-        KernelServicesBuilder builder = super.createKernelServicesBuilder(AdditionalInitialization.MANAGEMENT);
-        List<ModelNode> modelNodes = builder.parseXml(createSubsystemXml());
+        KernelServices kernelServices = createKernelServices(createSubsystemXml());
+
+        List<ModelNode> modelNodes = Collections.singletonList(kernelServices.readWholeModel());
         ModelNode model = modelNodes.get(0);
         Assert.assertTrue(model.get(SUBSYSTEM).hasDefined(JCoSubsystemExtension.SUBSYSTEM_NAME));
     }
@@ -72,22 +80,22 @@ public class JCoSubsystemParsingTestCase extends AbstractSubsystemTest {
      */
     @Test
     public void testParseAndMarshalModel() throws Exception {
-        fail();
-        KernelServicesBuilder builder = super.createKernelServicesBuilder(AdditionalInitialization.MANAGEMENT);
-        String subsystemXml = createSubsystemXml();
-        List<ModelNode> modelNodes = builder.parseXml(subsystemXml);
         //Parse the subsystem xml and install into the first controller
-//        KernelServices servicesA = super.installInController(subsystemXml);
-        //Get the model and the persisted xml from the first controller
-        //      ModelNode modelA = servicesA.readWholeModel();
-        //    String marshalled = servicesA.getPersistedSubsystemXml();
+        KernelServices servicesA = createKernelServices(createSubsystemXml());
+        ModelNode modelA = servicesA.readWholeModel();
 
         //Install the persisted xml from the first controller into a second controller
-        //  KernelServices servicesB = super.installInController(marshalled);
-        //ModelNode modelB = servicesB.readWholeModel();
+        KernelServices servicesB = createKernelServices(servicesA.getPersistedSubsystemXml());
+        ModelNode modelB = servicesB.readWholeModel();
 
         //Make sure the models from the two controllers are identical
-        // super.compare(modelA, modelB);
+        super.compare(modelA, modelB);
+    }
+
+    private KernelServices createKernelServices(String subsystemXml) throws Exception {
+        KernelServicesBuilder builder = super.createKernelServicesBuilder(AdditionalInitialization.MANAGEMENT);
+        builder.setBootOperations(builder.parseXml(subsystemXml));
+        return builder.build();
     }
 
     /**
@@ -96,9 +104,7 @@ public class JCoSubsystemParsingTestCase extends AbstractSubsystemTest {
      */
     @Test
     public void testDescribeHandler() throws Exception {
-        fail();
-        /*
-        KernelServices servicesA = super.installInController(createSubsystemXml());
+        KernelServices servicesA = createKernelServices(createSubsystemXml());
         //Get the model and the describe operations from the first controller
         ModelNode modelA = servicesA.readWholeModel();
         ModelNode describeOp = new ModelNode();
@@ -108,14 +114,15 @@ public class JCoSubsystemParsingTestCase extends AbstractSubsystemTest {
                         PathElement.pathElement(SUBSYSTEM, JCoSubsystemExtension.SUBSYSTEM_NAME)).toModelNode());
         List<ModelNode> operations = super.checkResultAndGetContents(servicesA.executeOperation(describeOp)).asList();
 
-
         //Install the describe options from the first controller into a second controller
-        KernelServices servicesB = super.installInController(operations);
+        KernelServicesBuilder builder = super.createKernelServicesBuilder(AdditionalInitialization.MANAGEMENT);
+        builder.setBootOperations(operations);
+        KernelServices servicesB = builder.build();
+
         ModelNode modelB = servicesB.readWholeModel();
 
         //Make sure the models from the two controllers are identical
         super.compare(modelA, modelB);
-        */
     }
 
     /**
@@ -123,17 +130,18 @@ public class JCoSubsystemParsingTestCase extends AbstractSubsystemTest {
      */
     @Test
     public void testSubsystemRemoval() throws Exception {
-        fail();
-        /**
-         KernelServices services = super.installInController(createSubsystemXml());
+        KernelServices services = createKernelServices(createEmptyJCoDestinationsSubsystem());
          //Checks that the subsystem was removed from the model
          super.assertRemoveSubsystemResources(services);
-         */
         //TODO Chek that any services that were installed were removed here
     }
 
     private String createSubsystemXml() {
         return "<subsystem xmlns=\"" + Namespace.CURRENT.getUriString() + "\">" +
+                "<jco-destinations>" +
+                JCoSubsystemXmlFactory.createJCoDestination("java:jboss/jco-destinations/ExampleDestination", "100", "00",
+                        "ExampleDestination", "user", "geheim", "apphost.your-organisation.intern") +
+                "</jco-destinations>" +
                 "</subsystem>";
     }
 }

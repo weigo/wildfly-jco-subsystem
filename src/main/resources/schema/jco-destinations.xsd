@@ -27,8 +27,8 @@
         <xs:all>
             <xs:element type="securityType" name="security"/>
             <xs:element type="xs:string" name="as-host"/>
-            <xs:element type="xs:string" name="group"/>
-            <xs:element type="xs:string" name="language"/>
+            <xs:element type="xs:string" name="group" minOccurs="0" maxOccurs="1" />
+            <xs:element type="xs:string" name="language" minOccurs="0" maxOccurs="1"/>
         </xs:all>
         <xs:attribute type="xs:string" name="jndi-name"/>
         <xs:attribute type="xs:byte" name="client"/>

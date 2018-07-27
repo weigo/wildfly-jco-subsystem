@@ -14,15 +14,12 @@ class JCoSubsystemAdd extends AbstractBoottimeAddStepHandler {
 
     static final JCoSubsystemAdd INSTANCE = new JCoSubsystemAdd();
 
-    private final Logger log = Logger.getLogger(JCoSubsystemAdd.class);
-
     private JCoSubsystemAdd() {
     }
 
     /** {@inheritDoc} */
     @Override
     protected void populateModel(ModelNode operation, ModelNode model) throws OperationFailedException {
-        log.info("Populating the model");
         model.setEmptyObject();
     }
 }

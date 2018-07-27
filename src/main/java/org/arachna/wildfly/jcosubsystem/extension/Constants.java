@@ -6,6 +6,7 @@ import org.jboss.as.controller.SimpleAttributeDefinitionBuilder;
 import org.jboss.as.controller.operations.validation.ParameterValidator;
 import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.ModelType;
+import org.jboss.logging.Messages;
 
 /**
  * JCoDestinationAttribute definitons for subsystem model.
@@ -13,7 +14,12 @@ import org.jboss.dmr.ModelType;
  * @author Dirk Weigenand
  */
 class Constants {
-    public static final SimpleAttributeDefinition DESTINATION = new SimpleAttributeDefinitionBuilder(JCoDestinationDescriptor.Attribute.DESTINATION.getLocalName(), ModelType.STRING, false)
+    /**
+     * The bundle
+     */
+    static JCoSubsystemBundle BUNDLE = Messages.getBundle(JCoSubsystemBundle.class);
+
+    static final SimpleAttributeDefinition DESTINATION = new SimpleAttributeDefinitionBuilder(JCoDestinationDescriptor.Attribute.DESTINATION.getLocalName(), ModelType.STRING, false)
             .setXmlName(JCoDestinationDescriptor.Attribute.DESTINATION.getLocalName())
             .setAllowExpression(true)
             .setValidator(new ParameterValidator() {
@@ -22,7 +28,7 @@ class Constants {
                     if (value.isDefined() && value.getType() != ModelType.EXPRESSION) {
                         String str = value.asString();
                         if (str.isEmpty()) {
-                            throw JCoDestinationSubsystemLogger.ROOT_LOGGER.destinationRequired();
+                            throw BUNDLE.destinationRequired();
                         }
                     }
                 }
@@ -48,13 +54,13 @@ class Constants {
                         if (value.getType() != ModelType.EXPRESSION) {
                             String str = value.asString();
                             if (!str.startsWith("java:/") && !str.startsWith("java:jboss/")) {
-                                throw JCoDestinationSubsystemLogger.ROOT_LOGGER.jndiNameInvalidFormat();
+                                throw BUNDLE.jndiNameInvalidFormat();
                             } else if (str.endsWith("/") || str.indexOf("//") != -1) {
-                                throw JCoDestinationSubsystemLogger.ROOT_LOGGER.jndiNameShouldValidate();
+                                throw BUNDLE.jndiNameShouldValidate();
                             }
                         }
                     } else {
-                        throw JCoDestinationSubsystemLogger.ROOT_LOGGER.jndiNameRequired();
+                        throw BUNDLE.jndiNameRequired();
                     }
                 }
 
@@ -78,7 +84,7 @@ class Constants {
                     if (value.isDefined() && value.getType() != ModelType.EXPRESSION) {
                         String str = value.asString();
                         if (str.isEmpty()) {
-                            throw JCoDestinationSubsystemLogger.ROOT_LOGGER.clientRequired();
+                            throw BUNDLE.clientRequired();
                         }
                     }
                 }
@@ -104,7 +110,7 @@ class Constants {
                     if (value.isDefined() && value.getType() != ModelType.EXPRESSION) {
                         String str = value.asString();
                         if (str.isEmpty()) {
-                            throw JCoDestinationSubsystemLogger.ROOT_LOGGER.clientRequired();
+                            throw BUNDLE.clientRequired();
                         }
                     }
                 }
@@ -158,5 +164,6 @@ class Constants {
             .build();
 
     static final SimpleAttributeDefinition[] JCO_DESTINATION_ATTRIBUTES = new SimpleAttributeDefinition[]{
-            SYSNR, CLIENT, JNDI_NAME, ASHOST, GROUP, LANG, USER_NAME, PASSWORD};
+            SYSNR, CLIENT, JNDI_NAME, ASHOST, GROUP, LANG, USER_NAME, PASSWORD, DESTINATION
+    };
 }

@@ -11,7 +11,7 @@ public class JCoSubsystemDefinition extends SimpleResourceDefinition {
 
     private JCoSubsystemDefinition() {
         super(JCoSubsystemExtension.SUBSYSTEM_PATH,
-                JCoSubsystemExtension.getResourceDescriptionResolver(null),
+                JCoSubsystemExtension.getResourceDescriptionResolver(),
                 //We always need to add an 'add' operation
                 JCoSubsystemAdd.INSTANCE,
                 //Every resource that is added, normally needs a remove operation
@@ -26,7 +26,7 @@ public class JCoSubsystemDefinition extends SimpleResourceDefinition {
 
     @Override
     public void registerAttributes(ManagementResourceRegistration resourceRegistration) {
-        //you can register attributes here
+        super.registerAttributes(resourceRegistration);
     }
 
     @Override

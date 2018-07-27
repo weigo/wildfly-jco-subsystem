@@ -94,18 +94,16 @@ public interface JCoDestinationDescriptor {
          */
         JCO_DESTINATION("jco-destination");
 
-        private static final Map<String, Tag> MAP;
+        private static final Map<String, Tag> MAP = new HashMap<>();
 
         static {
-            MAP = new HashMap<String, Tag>() {{
-                for (Tag element : values()) {
-                    final String name = element.getLocalName();
+            for (Tag element : values()) {
+                final String name = element.getLocalName();
 
-                    if (name != null) {
-                        put(name, element);
-                    }
+                if (name != null) {
+                    MAP.put(name, element);
                 }
-            }};
+            }
         }
 
         private String name;
@@ -184,18 +182,16 @@ public interface JCoDestinationDescriptor {
          */
         DESTINATION("destination");
 
-        private static final Map<String, Attribute> MAP;
+        private static final Map<String, Attribute> MAP = new HashMap<>();
 
         static {
-            MAP = new HashMap<String, Attribute>() {{
-                for (Attribute element : values()) {
-                    final String name = element.getLocalName();
+            for (Attribute element : values()) {
+                final String name = element.getLocalName();
 
-                    if (name != null) {
-                        put(name, element);
-                    }
+                if (name != null) {
+                    MAP.put(name, element);
                 }
-            }};
+            }
         }
 
         private String name;
