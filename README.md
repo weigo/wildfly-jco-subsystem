@@ -2,8 +2,6 @@
 
 The subsystem provides integration for the SAP JCo runtime into Wildfly.
 
-You will be able to describe JCo destinations
-
 ## Prerequisites
 
 The Widlfy JCo destination subsystem requires
