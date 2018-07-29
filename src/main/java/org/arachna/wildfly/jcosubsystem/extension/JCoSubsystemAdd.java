@@ -3,7 +3,6 @@ package org.arachna.wildfly.jcosubsystem.extension;
 import org.jboss.as.controller.AbstractBoottimeAddStepHandler;
 import org.jboss.as.controller.OperationFailedException;
 import org.jboss.dmr.ModelNode;
-import org.jboss.logging.Logger;
 
 /**
  * Handler responsible for adding the subsystem resource to the model

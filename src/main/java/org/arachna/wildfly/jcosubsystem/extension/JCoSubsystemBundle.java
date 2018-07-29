@@ -2,8 +2,9 @@ package org.arachna.wildfly.jcosubsystem.extension;
 
 import org.jboss.as.controller.OperationFailedException;
 import org.jboss.as.controller.PathAddress;
-import org.jboss.solder.messages.Message;
-import org.jboss.solder.messages.MessageBundle;
+import org.jboss.logging.annotations.Message;
+import org.jboss.logging.annotations.MessageBundle;
+
 
 /**
  * @author weigo
@@ -95,4 +96,13 @@ public interface JCoSubsystemBundle {
             value = "A destination name is required"
     )
     OperationFailedException destinationRequired();
+
+    @Message(id= 94, value="Registered JCo destination '%s' with JCoDestinationProvider.")
+    String registeredJCoDestination(String destination);
+
+    @Message(id= 95, value="Unregistered JCo destination '%s' with JNDI.")
+    String unregisteredJCoDestinationWithJNDI(String destination);
+
+    @Message(id= 96, value="Removed JCo destination '%s' from JNDI.")
+    String removedJCoDestinationFromJNDI(String jndiName);
 }

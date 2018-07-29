@@ -1,12 +1,10 @@
 package org.arachna.wildfly.jcosubsystem.extension;
 
-import org.jboss.as.controller.*;
-import org.jboss.as.controller.descriptions.DescriptionProvider;
+import org.jboss.as.controller.AbstractRemoveStepHandler;
+import org.jboss.as.controller.OperationContext;
+import org.jboss.as.controller.OperationFailedException;
+import org.jboss.as.controller.PathAddress;
 import org.jboss.dmr.ModelNode;
-import org.jboss.msc.service.ServiceName;
-
-import javax.sql.DataSource;
-import java.util.Locale;
 
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
 

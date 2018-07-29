@@ -28,7 +28,6 @@ public class SubsystemBaseParsingTestCase extends AbstractSubsystemBaseTest {
                 "</subsystem>";
     }
 
-    @Override
     protected String getSubsystemXsdPath() throws Exception {
         return "schema/jco-destinations.xsd";
     }

@@ -4,6 +4,7 @@ import com.sap.conn.jco.ext.DataProviderException;
 import com.sap.conn.jco.ext.DestinationDataEventListener;
 import com.sap.conn.jco.ext.DestinationDataProvider;
 import com.sap.conn.jco.ext.Environment;
+import org.jboss.logging.Messages;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +20,11 @@ public class JCoDestinationDataProvider implements DestinationDataProvider {
      * Should be singleton.
      */
     static final JCoDestinationDataProvider INSTANCE = new JCoDestinationDataProvider();
+
+    /**
+     * Logger.
+     */
+    private static final JCoSubsystemBundle BUNDLE = Messages.getBundle(JCoSubsystemBundle.class);
 
     /**
      * Map destination name to connection properties.
@@ -73,6 +79,8 @@ public class JCoDestinationDataProvider implements DestinationDataProvider {
         boolean alreadyRegistered = destinationData.containsKey(descriptor.getDestination());
 
         destinationData.put(descriptor.getDestination(), properties);
+
+        BUNDLE.registeredJCoDestination(descriptor.getDestination());
 
         if (alreadyRegistered && this.destinationDataEventListener != null) {
             this.destinationDataEventListener.updated(descriptor.getDestination());

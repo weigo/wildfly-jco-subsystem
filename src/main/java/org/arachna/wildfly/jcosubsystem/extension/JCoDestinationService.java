@@ -5,7 +5,12 @@ import com.sap.conn.jco.JCoDestinationManager;
 import com.sap.conn.jco.JCoException;
 import org.jboss.as.naming.deployment.ContextNames;
 import org.jboss.msc.inject.Injector;
-import org.jboss.msc.service.*;
+import org.jboss.msc.service.LifecycleContext;
+import org.jboss.msc.service.Service;
+import org.jboss.msc.service.ServiceName;
+import org.jboss.msc.service.StartContext;
+import org.jboss.msc.service.StartException;
+import org.jboss.msc.service.StopContext;
 import org.jboss.msc.value.InjectedValue;
 
 import java.util.concurrent.ExecutorService;
@@ -21,7 +26,7 @@ public class JCoDestinationService implements Service<JCoDestination> {
     /**
      *
      */
-    public static final ServiceName SERVICE_NAME_BASE = ServiceName.JBOSS.append("jco-destination");
+    public static final ServiceName SERVICE_NAME_BASE = ServiceName.JBOSS.append("jco-destinations");
 
     /**
      * Executor service to asynchronously delete JCo destination from JCo runtime.

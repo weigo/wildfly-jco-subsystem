@@ -27,8 +27,14 @@ public class JCoDestinationDefinition extends SimpleResourceDefinition {
     }
 
     public void registerAttributes(ManagementResourceRegistration resourceRegistration) {
-        for (SimpleAttributeDefinition attribute: JCO_DESTINATION_ATTRIBUTES) {
+        for (SimpleAttributeDefinition attribute : JCO_DESTINATION_ATTRIBUTES) {
             resourceRegistration.registerReadWriteAttribute(attribute, null, XMLJCoDestinationRuntimeHandler.INSTANCE);
         }
+    }
+
+
+    @Override
+    public void registerCapabilities(ManagementResourceRegistration resourceRegistration) {
+        resourceRegistration.registerCapability(Capabilities.JCO_DESTINATION_CAPABILITY);
     }
 }

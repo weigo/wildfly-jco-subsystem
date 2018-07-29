@@ -1,8 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <module xmlns="urn:jboss:module:1.0" name="org.arachna.jco-destinations">
     <resources>
-        <resource-root path="lib"/>
         <resource-root path="destination-service-subsystem.jar"/>
         <resource-root path="sapjco3.jar"/>
+        <resource-root path="lib"/>
     </resources>
     
     <dependencies>
