@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="com.sap.conn" xmlns="urn:jboss:module:1.5">
+    <resources>
+        <resource-root path="sapjco3.jar"/>
+        <resource-root path="lib"/>
+    </resources>
+</module>

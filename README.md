@@ -38,21 +38,43 @@ export WILDFLY_HOME=/opt/wildfly-12.0.0.Final
 mvn clean package && cp -av target/module/* $WILDFLY_HOME/modules/system/layers/base/
 ```
 
-In the folder `$WILDFLY_HOME/modules/system/layers/base/org/arachna/jco-destinations/main` create a subfolder `lib`.
-Add subfolders wrt. to your server architecture:
+## SAP JCo module
 
-| Architecture | Subfolder |
-| --- | --- |
-| Windows | win-x86_64 |
-| Linux | linux-x86_64 |
+Install the SAP JCo3 module into your Wildfly installation using the shell script in the `installation` folder: 
 
-The reference document wrt. to supporting native libraries in Wildfly modules can be found in the
-[JBoss modules manual, subsection native libraries](https://jboss-modules.github.io/jboss-modules/manual/#native-libraries).
+* Use the switch `-j` to denote the download folder of your SAP JCo3 connector, e.g. ~/Downloads/JCo3.
+* Use the switch `-t` to denote the folder where your Wildfly installation resides, e.g. the $WILDFLY_HOME environment variable in the section above.
 
-Copy the `sapjco3.jar` from your JCo connector download to `$WILDFLY_HOME/modules/system/layers/base/org/arachna/jco-destinations/main`.
+```
+weigo@eileanne:~/workspace/destination-service-subsystem/install$ ./install-sapjco-module.sh -j ~/tmp/sap-jco3 -t ~/tmp/wildfly-12.0.0.Final
+Installing module base...
+'modules/system/layers/base/com/sap' -> '/home/weigo/tmp/wildfly-12.0.0.Final/modules/system/layers/base/com/sap'
+'modules/system/layers/base/com/sap/conn' -> '/home/weigo/tmp/wildfly-12.0.0.Final/modules/system/layers/base/com/sap/conn'
+'modules/system/layers/base/com/sap/conn/main' -> '/home/weigo/tmp/wildfly-12.0.0.Final/modules/system/layers/base/com/sap/conn/main'
+'modules/system/layers/base/com/sap/conn/main/module.xml' -> '/home/weigo/tmp/wildfly-12.0.0.Final/modules/system/layers/base/com/sap/conn/main/module.xml'
+Installing sapjco3.jar into module...
+'/home/weigo/tmp/sap-jco3/sapjco3.jar' -> '/home/weigo/tmp/wildfly-12.0.0.Final/modules/system/layers/base/com/sap/conn/main/sapjco3.jar'
+Installing libsapjco3.so into module...
+'/home/weigo/tmp/sap-jco3/libsapjco3.so' -> '/home/weigo/tmp/wildfly-12.0.0.Final/modules/system/layers/base/com/sap/conn/main/lib/linux-x86_64/libsapjco3.so'
+Installed SAP JCo3 module into /home/weigo/tmp/wildfly-12.0.0.Final/modules/system/layers/base/com/sap/conn/main:
+/home/weigo/tmp/wildfly-12.0.0.Final/modules/system/layers/base/com/sap/conn/main:
+insgesamt 1452
+drwxr-xr-x 1 weigo weigo      24 Aug  2 23:29 lib
+-rw-r--r-- 1 weigo weigo     220 Aug  2 22:34 module.xml
+-rwxr-xr-x 1 weigo weigo 1479890 Jul 17  2017 sapjco3.jar
+
+/home/weigo/tmp/wildfly-12.0.0.Final/modules/system/layers/base/com/sap/conn/main/lib:
+insgesamt 0
+drwxr-xr-x 1 weigo weigo 26 Aug  2 23:29 linux-x86_64
+
+/home/weigo/tmp/wildfly-12.0.0.Final/modules/system/layers/base/com/sap/conn/main/lib/linux-x86_64:
+insgesamt 5260
+-rwxr-xr-x 1 weigo weigo 5383939 Jul 17  2017 libsapjco3.so
+```
 
 ## Installation/Configuration
-* In `standalone.xml` add the `org.arachna.jco-destinations` module to the exstensions list to register the extension with your wildfly installation:
+
+* In `standalone.xml` add the `org.arachna.jco-destinations` module to the extensions list to register the extension with your wildfly installation:
 
 ```
 <server xmlns="urn:jboss:domain:6.0">
@@ -149,7 +171,7 @@ public class JAXRSConfiguration extends Application {
 mvn clean package && cp target/jaxrs-jco-test.war $WILDFLY_HOME/standalone/deployments
 ```
 
-* and call the RESt service from the browser: `http://localhost:8080/jaxrs-jco-test/resources/jcotest`
+* and call the REST service from the browser: `http://localhost:8080/jaxrs-jco-test/resources/jcotest`
 
 The result should list your JCo destination name as you configured it in `standalone.xml`
 
