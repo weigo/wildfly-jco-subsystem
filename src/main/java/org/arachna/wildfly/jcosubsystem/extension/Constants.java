@@ -3,6 +3,7 @@ package org.arachna.wildfly.jcosubsystem.extension;
 import org.jboss.as.controller.OperationFailedException;
 import org.jboss.as.controller.SimpleAttributeDefinition;
 import org.jboss.as.controller.SimpleAttributeDefinitionBuilder;
+import org.jboss.as.controller.access.management.SensitiveTargetAccessConstraintDefinition;
 import org.jboss.as.controller.operations.validation.ParameterValidator;
 import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.ModelType;
@@ -156,7 +157,7 @@ class Constants {
             .setAllowExpression(true)
             .setXmlName(Security.Tag.PASSWORD.getLocalName())
             .setRequires(Security.Tag.USER_NAME.getLocalName())
-//            .addAccessConstraint(SensitiveTargetAccessConstraintDefinition.CREDENTIAL)
+            .addAccessConstraint(SensitiveTargetAccessConstraintDefinition.CREDENTIAL)
 //            .addAccessConstraint(DS_SECURITY_DEF)
 //            .addAlternatives(CredentialReference.CREDENTIAL_REFERENCE)
 
