@@ -10,7 +10,7 @@ The Widlfy JCo destination subsystem requires
 * the SAP JCo connector JAR and runtime libraries must be obtained separately (you will need an S-User account at the download site).
 
 ## Building
-Install the `sapjco3.jar` from your JCo connector download into your local Maven repository.
+Install the `sapjco3.jar` from your [JCo connector download](http://service.sap.com/connectors) into your local Maven repository.
 
 ### Maven command line
 
@@ -106,7 +106,7 @@ insgesamt 5260
 
 ## Example application
 
-According to [Class loading in Wildfly]()https://docs.jboss.org/author/display/WFLY10/Class+Loading+in+WildFly) you can
+According to [Class loading in Wildfly](https://docs.jboss.org/author/display/WFLY10/Class+Loading+in+WildFly) you can
 make the modules classes available to application via a deployment descriptor, so:
 
 * Create an example test application, f.e. using the `com.airhacks` maven archetype:
@@ -123,22 +123,19 @@ mvn archetype:generate -Dfilter=com.airhacks:javaee7-essentials-archetype
 <jboss-deployment-structure>
 	<deployment>
 		<dependencies>
-			<module name="org.arachna.jco-destinations"/>
+			<module name="com.sap.conn"/>
 		</dependencies>
 	</deployment>
 </jboss-deployment-structure>
 ``` 
 
-### Spoiler alert
-
-The above should be fixed to make the JCo3 library separatly as a module in Wildfly available which should be referenced
-by both the JCo destination subsystem and Web applications.
-
+This will make the classes from the SAP JCo connector available to your application.
+ 
 * Add a REST ressource to the project:
 
 ```
 @Path("/jcotest")
-public class JCoTestResrource {
+public class JCoTestRessource {
 
     @Resource(name = "java:jboss/jco-destinations/ExampleDestination")
     private JCoDestination destination;
